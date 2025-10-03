@@ -1,6 +1,28 @@
 import mongoose from "mongoose";
 import { eventModel } from "../model/eventModel.js";
 import asyncHandler from "express-async-handler";
+import jwt from "jsonwebtoken";
+
+const extractAndVerifyRole = (req, res) => {
+  const authHeader = req.headers.authorization || req.headers.Authorization;
+
+  if (!authHeader?.startsWith("Bearer ")) {
+    return { role: null, id: null };
+  }
+
+  const token = authHeader.split(" ")[1];
+  let decoded = null;
+
+  try {
+    decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    return { 
+        role: decoded.user.role,
+        id: decoded.user.id 
+    };
+  } catch (error) {
+    return { role: null, id: null };
+  }
+};
 
 // get all events
 // get method
@@ -32,13 +54,19 @@ export const getEvent = asyncHandler(async (req, res) => {
 
 // create event
 // post method
-export const createEvents = asyncHandler(async (req, res) => {
+export const createEvent = asyncHandler(async (req, res) => {
+  const user = extractAndVerifyRole(req, res);
+
+  if (user.role !== "admin") {
+    return res.status(403).json({ message: "Not authorized" });
+  }
+
   const {
     title,
     desciption,
     location,
     flyerUrl,
-    startsAt,
+    startAt,
     endsAt,
     capacity,
     createdByUserId,
@@ -48,10 +76,10 @@ export const createEvents = asyncHandler(async (req, res) => {
     desciption,
     location,
     flyerUrl,
-    startsAt,
+    startAt,
     endsAt,
     capacity,
-    createdByUserId,
+    createdByUserId: user.id || createdByUserId,
   });
 
   if (event) {
@@ -64,6 +92,12 @@ export const createEvents = asyncHandler(async (req, res) => {
 // update event
 // patch method
 export const updateEvent = asyncHandler(async (req, res) => {
+  const user = extractAndVerifyRole(req, res);
+
+  if (user.role !== "admin") {
+    return res.status(403).json({ message: "Not authorized" });
+  }
+
   const id = req.params.id;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -81,6 +115,12 @@ export const updateEvent = asyncHandler(async (req, res) => {
 // delete event
 // delete method
 export const deleteEvent = asyncHandler(async (req, res) => {
+  const user = extractAndVerifyRole(req, res);
+
+  if (user.role !== "admin") {
+    return res.status(403).json({ message: "Not authorized" });
+  }
+
   const id = req.params.id;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {

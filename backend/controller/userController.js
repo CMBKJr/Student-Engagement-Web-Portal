@@ -33,7 +33,7 @@ export const getUser = asyncHandler(async (req, res) => {
 
 // create user
 // post method
-export const createUsers = asyncHandler(async (req, res) => {
+export const createUser = asyncHandler(async (req, res) => {
   const { firstname, lastname, email, password } = req.body;
 
   if (!firstname || !lastname || !email || !password) {

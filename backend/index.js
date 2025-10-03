@@ -1,10 +1,11 @@
 import express from "express";
 import cors from "cors";
-import { connectDB } from "./config/db";
+import { connectDB } from "./config/db.js";
 import dotenv from "dotenv";
-import eventRoutes from "./routes/eventRoutes";
-import userRoutes from "./routes/userRoutes";
-import milestoneRoutes from './routes/milestoneRoutes'
+import eventRoutes from "./routes/eventRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+// import milestoneRoutes from './routes/milestoneRoutes.js'
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.get('/', (req, res) => {
 // routes mounting
 app.use("/api/events", eventRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/auth", authRoutes);
 
 // ports
 const port = 8080 || process.env.PORT;
