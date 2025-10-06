@@ -1,6 +1,6 @@
 import { userModel } from "../model/userModel.js";
-import { eventModel } from "../models/eventModel.js";
-import EventParticipation from "../models/ParticipationModel.js";
+import { eventModel } from "../model/eventModel.js";
+import EventParticipation from "../model/eventParticipationModel.js";
 import mongoose from "mongoose";
 
 const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);

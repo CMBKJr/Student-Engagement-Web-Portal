@@ -29,6 +29,10 @@ const userSchema = new Schema(
     completedMilestones: [
       { type: mongoose.Schema.Types.ObjectId, ref: "Milestone" },
     ],
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
     displayImageUrl: {
       type: String,
       required: true,

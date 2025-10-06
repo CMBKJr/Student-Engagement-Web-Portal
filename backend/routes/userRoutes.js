@@ -5,20 +5,29 @@ import {
   createUser,
   updateUser,
   deleteUser,
+  verifyEmail,
   login,
 } from "../controller/userController.js";
+import { verifyJWT } from "../middleware/verifyJWT.js";
+// import multer from "multer";
+
+// multer setup
+// const storage = multer.memoryStorage();
+// const upload = multer({ storage: storage });
 
 const router = express.Router();
 
-router.get("/", getUsers);
+router.get("/", verifyJWT, getUsers);
 
-router.get("/:id", getUser);
+router.get("/:id", verifyJWT, getUser);
 
 router.post("/", createUser);
 
-router.patch("/:id", updateUser);
+router.get("/verify/:token", verifyEmail);
 
-router.delete("/:id", deleteUser);
+router.patch("/:id", verifyJWT, updateUser);
+
+router.delete("/:id", verifyJWT, deleteUser);
 
 router.post("/login", login);
 
