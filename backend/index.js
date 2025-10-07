@@ -40,7 +40,10 @@ app.use("/api/auth", authRoutes);
 app.use("/api/participate", participationRoutes);
 
 // automate rss ingest
-cron.schedule("0 0 * * *", ingestRssAlone);
+cron.schedule("0 0 * * *", ingestRssAlone, {
+  scheduled: true,
+  timezone: "America/New_York" 
+});
 // ingestRssAlone()
 
 // ports
