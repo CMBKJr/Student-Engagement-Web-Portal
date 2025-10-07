@@ -13,6 +13,7 @@
   "description": "",
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "cheerio": "^1.1.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "data-fns": "^1.1.0",
@@ -20,11 +21,15 @@
     "express": "^5.1.0",
     "express-async-handler": "^1.2.0",
     "express-rate-limit": "^8.1.0",
+    "he": "^1.2.0",
+    "html-to-text": "^9.0.5",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.19.0",
     "multer": "^2.0.2",
+    "node-cron": "^4.2.1",
     "nodemailer": "^7.0.7",
     "nodemon": "^3.1.10",
+    "rss-to-json": "^2.1.1",
     "uuid": "^13.0.0"
   }
 }

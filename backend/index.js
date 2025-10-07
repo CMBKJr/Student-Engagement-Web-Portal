@@ -7,8 +7,12 @@ import userRoutes from "./routes/userRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import participationRoutes from "./routes/participationRoutes.js";
 import cookieParser from "cookie-parser";
+import cron from "node-cron";
+import { ingestRssAlone } from "./transformRss.js";
 import jwt from "jsonwebtoken";
 import multer from "multer";
+
+
 // import milestoneRoutes from './routes/milestoneRoutes.js'
 
 dotenv.config();
@@ -35,17 +39,9 @@ app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/participate", participationRoutes);
 
-// test
-app.get("/decode-cookie", (req, res) => {
-  try {
-    const token = req.cookies?.jwt;
-    if (!token) return res.json({ message: "No cookie found" });
-    const decoded = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
-    res.json({ decoded });
-  } catch (err) {
-    res.json({ error: err.message });
-  }
-});
+// automate rss ingest
+cron.schedule("0 0 * * *", ingestRssAlone);
+// ingestRssAlone()
 
 // ports
 const port = 8080 || process.env.PORT;

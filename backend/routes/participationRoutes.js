@@ -13,8 +13,8 @@ router.post("/register", verifyJWT, registerForEvent);
 
 router.post("/unregister", verifyJWT, unregisterFromEvent);
 
-router.get("/registered/:userId", verifyJWT, getRegisteredEvents);
+router.get("/registered/:id", verifyJWT, getRegisteredEvents);
 
-router.get("/attended/:userId", verifyJWT, getAttendedEvents);
+router.get("/attended/:id", verifyJWT, getAttendedEvents);
 
 export default router

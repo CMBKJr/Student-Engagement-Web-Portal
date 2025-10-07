@@ -32,10 +32,17 @@ const eventSchema = new Schema(
     capacity: {
       type: Number,
     },
-    createdByUserId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+    externalId: {
+      type: String,
       index: true,
+      unique: true,
+      sparse: true,
+    },
+    categories: {
+      type: [String],
+    },
+    externalLink: {
+      type: String,
     },
   },
   { timestamps: true }
