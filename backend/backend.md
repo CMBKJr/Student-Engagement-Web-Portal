@@ -33,4 +33,9 @@
 - [ ] Forgot Password
 - [ ] Save user image to AWS S3 bucket
 - [ ] Generate report of student Engagement
-- [ ] Student mark attend
+- [ ] Student mark attend "Click "I'm here" to check in to events"
+- [ ] Milestone logic
+- [ ] Send automated email to admin when student reach milestone
+- [ ] Notify student of upcoming events
+- [ ] Admin needs to be able to define and edit milestone map
+- [ ] Admin needs to be able to issue digital certificates and manage badge criteria

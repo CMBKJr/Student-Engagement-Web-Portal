@@ -133,7 +133,6 @@ export async function ingestRssAlone() {
     }
   }
 
-  // --- Email Notification ---
   try {
     const today = new Date();
     const todayString = today.toLocaleDateString("en-US", {
