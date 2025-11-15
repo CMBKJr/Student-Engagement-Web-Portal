@@ -21,8 +21,8 @@
 | Get All Events Registed for by User | `BaseUrl`/api/participate/registered/:id | Get all events student is registered for  |
 | Get All Events Attended for by User | `BaseUrl`/api/participate/attended/:id | Get all events student has attended |
 | Unregister From Event | `BaseUrl`/api/participate/unregister | Unregister student from event |
-<!-- |  |  |  |
-|  |  |  | -->
+| Mark as attended | `BaseUrl`/api/participate/markattended | Mark student as attended for event |
+<!-- |  |  |  | -->
 
 
 ### Checklist
@@ -30,11 +30,11 @@
 - [X] Backend API setup
 - [X] Email verification
 - [X] RSS Ingestion
-- [ ] Forgot Password
+- [X] Forgot Password
 - [ ] Save user image to AWS S3 bucket
 - [ ] Generate report of student Engagement
-- [ ] Student mark attend "Click "I'm here" to check in to events"
-- [ ] Milestone logic
+- [X] Student mark attend "Click "I'm here" to check in to events"
+- [X] Milestone logic
 - [ ] Send automated email to admin when student reach milestone
 - [ ] Notify student of upcoming events
 - [ ] Admin needs to be able to define and edit milestone map

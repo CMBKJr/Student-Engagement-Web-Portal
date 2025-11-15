@@ -1,7 +1,9 @@
 import { userModel } from "../model/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 import asyncHandler from "express-async-handler";
+import { transporter } from "../config/emailConfig.js";
 
 export const login = asyncHandler(async (req, res) => {
   let { email, password } = req.body;
@@ -17,7 +19,9 @@ export const login = asyncHandler(async (req, res) => {
   if (!foundUser) return res.status(401).json({ message: "Unauthorized" });
 
   if (!foundUser.isVerified) {
-    return res.status(401).json({ message: "Please verify your email to login" });
+    return res
+      .status(401)
+      .json({ message: "Please verify your email to login" });
   }
 
   const match = await bcrypt.compare(password, foundUser.password);
@@ -86,8 +90,69 @@ export const refresh = asyncHandler(async (req, res) => {
 
 export const logout = (req, res) => {
   const cookies = req.cookies;
-  if (!cookies?.jwt) return res.sendStatus(204); 
+  if (!cookies?.jwt) return res.sendStatus(204);
 
   res.clearCookie("jwt", { httpOnly: true, sameSite: "Lax", secure: false });
   res.json({ message: "Cookie cleared" });
 };
+
+export const forgotPassword = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) return res.status(400).json({ message: "Email required" });
+
+  const user = await userModel.findOne({ email });
+  if (!user) {
+    return res.status(200).json({
+      message: "If this email exists, a reset link has been sent.",
+    });
+  }
+
+ // Generate token
+  const resetToken = crypto.randomBytes(32).toString("hex");
+
+  // Hash token before saving (security)
+  const hashedToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  // Set reset token + expiration
+  user.resetPasswordToken = hashedToken;
+  user.resetPasswordExpire = Date.now() + 60 * 60 * 1000; // 1 hour
+  await user.save();
+
+  // Create reset URL
+  const resetUrl = `${process.env.CLIENT_URL}/forgot-password/${resetToken}`;
+
+
+    try {
+    await transporter.sendMail({
+      from: `"Student Engagement Web Portal " <${process.env.EMAIL_USER}>`,
+      to: user.email,
+      subject: "Password Reset Request",
+      html: `
+        <h3>Hello ${user.firstname},</h3>
+        <p>You requested a password reset.</p>
+        <p>Click the link below to set a new password:</p>
+
+        <a href="${resetUrl}" 
+          style="background:#007bff;color:white;padding:10px 15px;text-decoration:none;border-radius:5px;">
+          Reset Password
+        </a>
+
+        <p>This link expires in 1 hour.</p>
+      `,
+    });
+
+    res.json({ message: "Password reset link has been sent to your email." });
+
+  } catch (error) {
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+    await user.save();
+
+    console.log("Email send error:", error);
+    res.status(500).json({ message: "Error sending reset email." });
+  }
+});

@@ -74,7 +74,7 @@ export const createUser = asyncHandler(async (req, res) => {
 
   try {
     await transporter.sendMail({
-      from: `"Your App Name" <${process.env.EMAIL_USER}>`,
+      from: `"Student Engagement Web Portal " <${process.env.EMAIL_USER}>`,
       to: user.email,
       subject: "Verify your email address",
       html: `

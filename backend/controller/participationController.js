@@ -1,6 +1,8 @@
 import { userModel } from "../model/userModel.js";
 import { eventModel } from "../model/eventModel.js";
 import EventParticipation from "../model/eventParticipationModel.js";
+import { findMatchingMilestone } from "../utils/matchMilestone.js";
+import { milestoneModel } from "../model/milestoneModel.js";
 import mongoose from "mongoose";
 
 const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
@@ -199,4 +201,35 @@ export const unregisterFromEvent = async (req, res) => {
     console.error("Error unregistering user from event:", error);
     res.status(500).json({ message: "Server error during unregistration." });
   }
+};
+
+export const markEventAsAttended = async (req, res) => {
+  const { userId, eventId } = req.body;
+  
+  const event = await eventModel.findById(eventId).lean();
+  if (!event) return res.status(404).json({ message: "Event not found" });
+
+  // Mark attended (your existing logic)
+  const participation = await EventParticipation.findOne({
+    userId,
+    eventId
+  });
+  participation.status = "attended";
+  participation.attendedAt = new Date();
+  await participation.save();
+
+  // AUTOMATIC MILESTONE MATCHING
+  const matchedMilestone = await findMatchingMilestone(event.title, milestoneModel);
+
+  if (matchedMilestone) {
+    await userModel.findByIdAndUpdate(
+      userId,
+      { $addToSet: { completedMilestones: matchedMilestone._id } }
+    );
+  }
+
+  res.json({
+    message: "Event marked as attended.",
+    milestoneCompleted: matchedMilestone ? matchedMilestone.title : null
+  });
 };

@@ -45,6 +45,8 @@ const userSchema = new Schema(
       required: true,
       default: "student",
     },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
   },
   { timestamps: true }
 );

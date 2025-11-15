@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const milestoneSchema = new Schema(
   {
-    name: {
+    title: {
       type: String,
       required: true,
       trim: true,
@@ -16,12 +16,17 @@ const milestoneSchema = new Schema(
     // dueDate: {
     //     type: Date
     // },
-    order: {
-      type: Number,
-      default: 0,
-      index: true,
+    stage: {
+      type: String,
+      // default: 0,
+      // index: true,
     },
+    autoKeywords: { 
+      type: [String], 
+
+    }
   },
+  
   { timestamps: true }
 );
 

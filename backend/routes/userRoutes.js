@@ -31,4 +31,5 @@ router.delete("/:id", verifyJWT, deleteUser);
 
 router.post("/login", login);
 
+
 export default router;
