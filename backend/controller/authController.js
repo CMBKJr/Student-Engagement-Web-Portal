@@ -108,7 +108,7 @@ export const forgotPassword = asyncHandler(async (req, res) => {
     });
   }
 
- // Generate token
+  // Generate token
   const resetToken = crypto.randomBytes(32).toString("hex");
 
   // Hash token before saving (security)
@@ -123,10 +123,9 @@ export const forgotPassword = asyncHandler(async (req, res) => {
   await user.save();
 
   // Create reset URL
-  const resetUrl = `${process.env.CLIENT_URL}/forgot-password/${resetToken}`;
+  const resetUrl = `${process.env.CLIENT_URL}/resetPSW/${resetToken}`;
 
-
-    try {
+  try {
     await transporter.sendMail({
       from: `"Student Engagement Web Portal " <${process.env.EMAIL_USER}>`,
       to: user.email,
@@ -146,7 +145,6 @@ export const forgotPassword = asyncHandler(async (req, res) => {
     });
 
     res.json({ message: "Password reset link has been sent to your email." });
-
   } catch (error) {
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
@@ -155,4 +153,34 @@ export const forgotPassword = asyncHandler(async (req, res) => {
     console.log("Email send error:", error);
     res.status(500).json({ message: "Error sending reset email." });
   }
+});
+
+export const resetPassword = asyncHandler(async (req, res) => {
+  const { email, newPassword } = req.body;
+
+  if (!email || !newPassword) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
+  const user = await userModel.findOne({ email }).exec();
+
+  if (!user) {
+    return res.status(400).json({ message: "User not found" });
+  }
+
+  const hashedPwd = await bcrypt.hash(newPassword, 10);
+
+  // user.password = hashedPwd;
+  // await user.save();
+
+  const updatedUser = await userModel.findByIdAndUpdate(
+    user._id,
+    { password: hashedPwd },
+    { new: true }
+  );
+
+  res.status(200).json({
+    updatedUser,
+    message: `${user.firstname} ${user.lastname} password updated`,
+  });
 });

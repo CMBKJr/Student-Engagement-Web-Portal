@@ -46,11 +46,11 @@ cron.schedule("0 1 * * *", ingestRssAlone, {
   timezone: "America/New_York",
 });
 
-setInterval(() => {
-  ingestRssAlone()
-  console.log('printing from setInterval') 
-}
-, 24 * 60 * 60 * 1000);
+// setInterval(() => {
+//   ingestRssAlone()
+//   console.log('printing from setInterval') 
+// }
+// , 24 * 60 * 60 * 1000);
 // ingestRssAlone()
 
 // ports

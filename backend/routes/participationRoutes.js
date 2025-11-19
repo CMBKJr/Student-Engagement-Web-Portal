@@ -4,7 +4,8 @@ import {
   getAttendedEvents,
   getRegisteredEvents,
   unregisterFromEvent,
-  markEventAsAttended
+  markEventAsAttended,
+  generateReport
 } from "../controller/participationController.js";
 import { verifyJWT } from "../middleware/verifyJWT.js";
 
@@ -16,8 +17,10 @@ router.post("/unregister", verifyJWT, unregisterFromEvent);
 
 router.post("/markattended", verifyJWT, markEventAsAttended);
 
-router.get("/registered/:id", verifyJWT, getRegisteredEvents);
+router.get("/registered/:userId", verifyJWT, getRegisteredEvents);
 
-router.get("/attended/:id", verifyJWT, getAttendedEvents);
+router.get("/attended/:userId", verifyJWT, getAttendedEvents);
+
+router.get("/generateReport", generateReport);
 
 export default router

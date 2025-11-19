@@ -318,5 +318,42 @@ h1{
   text-align: center;
   text-transform: uppercase;
   padding: 20px;
-  background-color: #f0f0f0;
+  background-color: #f0f0f0; 
+  border-radius: 10px;
+}
+
+
+
+/* ########################### GENERATE REPORT PAGE ############################################### */
+
+
+
+.generate-table {
+  width: 100%;
+  justify-self: center;
+  border-collapse: collapse;
+  background-color: #fff;
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+
+.generate-table th,
+.generate-table td {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.generate-table th {
+  /* background-color: rgb(192, 185, 147); */
+  background-color: rgb(140, 133, 93);
+  color: white;
+}
+
+.generate-table tr:nth-child(even) {
+  background-color: #e9e9ea;
+}
+
+.generate-h2 {
+  text-align: center;
 }
