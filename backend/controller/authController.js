@@ -27,33 +27,44 @@ export const login = asyncHandler(async (req, res) => {
   const match = await bcrypt.compare(password, foundUser.password);
   if (!match) return res.status(401).json({ message: "Unauthorized" });
 
-  const accessToken = jwt.sign(
-    {
-      sub: String(foundUser._id),
-      user: {
-        id: String(foundUser._id),
-        email: foundUser.email,
-        role: foundUser.role ?? null,
-      },
-    },
-    process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "15m" }
-  );
+  // const accessToken = jwt.sign(
+  //   {
+  //     sub: String(foundUser._id),
+  //     user: {
+  //       id: String(foundUser._id),
+  //       email: foundUser.email,
+  //       role: foundUser.role ?? null,
+  //     },
+  //   },
+  //   process.env.ACCESS_TOKEN_SECRET,
+  //   { expiresIn: "15m" }
+  // );
 
-  const refreshToken = jwt.sign(
-    { email: foundUser.email },
-    process.env.REFRESH_TOKEN_SECRET,
-    { expiresIn: "7d" }
-  );
+  // const refreshToken = jwt.sign(
+  //   { email: foundUser.email },
+  //   process.env.REFRESH_TOKEN_SECRET,
+  //   { expiresIn: "7d" }
+  // );
 
-  res.cookie("jwt", refreshToken, {
-    httpOnly: true,
-    secure: false,
-    sameSite: "Lax",
-    maxAge: 7 * 24 * 60 * 60 * 1000,
+  // res.cookie("jwt", refreshToken, {
+  //   httpOnly: true,
+  //   secure: false,
+  //   sameSite: "Lax",
+  //   maxAge: 7 * 24 * 60 * 60 * 1000,
+  // });
+
+  // res.json({ accessToken });
+
+  return res.status(200).json({
+    message: "Login successful",
+    user: {
+      id: foundUser._id,
+      firstname: foundUser.firstname,
+      lastname: foundUser.lastname,
+      email: foundUser.email,
+      role: foundUser.role ?? null,
+    }
   });
-
-  res.json({ accessToken });
 });
 
 export const refresh = asyncHandler(async (req, res) => {

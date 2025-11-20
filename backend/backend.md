@@ -31,7 +31,7 @@
 <!-- |  |  |  | -->
 
 
-### Checklist
+### Backend Checklist
 - [X] MongoDB Setup
 - [X] Backend API setup
 - [X] Email verification
@@ -45,3 +45,7 @@
 - [ ] Notify student of upcoming events
 - [ ] Admin needs to be able to define and edit milestone map
 - [ ] Admin needs to be able to issue digital certificates and manage badge criteria
+
+### Frontend Checklist
+- [ ] Admin dashboard
+- [ ] User update/profile

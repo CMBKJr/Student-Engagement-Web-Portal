@@ -11,13 +11,13 @@ import { verifyJWT } from "../middleware/verifyJWT.js";
 
 const router = express.Router()
 
-router.post("/register", verifyJWT, registerForEvent);
+router.post("/register", registerForEvent);
 
-router.post("/unregister", verifyJWT, unregisterFromEvent);
+router.post("/unregister", unregisterFromEvent);
 
-router.post("/markattended", verifyJWT, markEventAsAttended);
+router.post("/markattended", markEventAsAttended);
 
-router.get("/registered/:userId", verifyJWT, getRegisteredEvents);
+router.get("/registered/:userId", getRegisteredEvents);
 
 router.get("/attended/:userId", verifyJWT, getAttendedEvents);
 

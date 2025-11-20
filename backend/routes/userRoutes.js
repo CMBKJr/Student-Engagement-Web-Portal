@@ -17,19 +17,19 @@ import { verifyJWT } from "../middleware/verifyJWT.js";
 
 const router = express.Router();
 
-router.get("/", verifyJWT, getUsers);
+router.get("/", getUsers);
 
-router.get("/:id", verifyJWT, getUser);
+router.get("/:id", getUser);
 
 router.post("/", createUser);
 
 router.get("/verify/:token", verifyEmail);
 
-router.patch("/:id", verifyJWT, updateUser);
+router.patch("/:id", updateUser);
 
-router.delete("/:id", verifyJWT, deleteUser);
+router.delete("/:id", deleteUser);
 
-router.post("/login", login);
+// router.post("/login", login);
 
 
 export default router;
