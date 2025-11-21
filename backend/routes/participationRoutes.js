@@ -19,7 +19,7 @@ router.post("/markattended", markEventAsAttended);
 
 router.get("/registered/:userId", getRegisteredEvents);
 
-router.get("/attended/:userId", verifyJWT, getAttendedEvents);
+router.get("/attended/:userId", getAttendedEvents);
 
 router.get("/generateReport", generateReport);
 
