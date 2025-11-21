@@ -18,7 +18,7 @@ const deleteUser = (id) => {
   return axios.delete(`${baseUrl}api/users/${id}`);
 };
 const login = (userDetail) => {
-  return axios.post(`${baseUrl}/api/auth/`, userDetail);
+  return axios.post(`${baseUrl}api/auth/`, userDetail);
 };
 
 export default {

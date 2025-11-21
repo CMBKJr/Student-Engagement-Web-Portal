@@ -8,12 +8,7 @@ import {
   verifyEmail,
   login,
 } from "../controller/userController.js";
-import { verifyJWT } from "../middleware/verifyJWT.js";
-// import multer from "multer";
 
-// multer setup
-// const storage = multer.memoryStorage();
-// const upload = multer({ storage: storage });
 
 const router = express.Router();
 

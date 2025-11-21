@@ -20,3 +20,11 @@ export const createMilestone = asyncHandler(async (req, res) => {
   }
 });
 
+export const getMilestones = asyncHandler(async (req, res) => {
+   const milestones = await milestoneModel.find();
+  
+    if (!milestones) {
+      return res.status(400).json({ message: "No Milestones found" });
+    }
+    res.status(200).json(milestones);
+})
