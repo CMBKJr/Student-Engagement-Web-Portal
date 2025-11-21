@@ -2,10 +2,30 @@ import axios from "axios";
 
 const baseUrl = "http://localhost:8080/";
 
-const create = (form) => {
-  return axios.post(`${baseUrl}api/users`, form);
+const create = (user) => {
+  return axios.post(`${baseUrl}api/users`, user);
+};
+const getOne = (id) => {
+  return axios.get(`${baseUrl}api/users/${id}`);
+};
+const getAll = () => {
+  return axios.get(`${baseUrl}api/users`);
+};
+const updateUser = (id, user) => {
+  return axios.patch(`${baseUrl}api/users`, user);
+};
+const deleteUser = (id) => {
+  return axios.delete(`${baseUrl}api/users/${id}`);
+};
+const login = (userDetail) => {
+  return axios.post(`${baseUrl}/api/auth/`, userDetail);
 };
 
 export default {
   create,
+  getOne,
+  getAll,
+  updateUser,
+  deleteUser,
+  login,
 };

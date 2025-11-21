@@ -69,8 +69,8 @@ export const createUser = asyncHandler(async (req, res) => {
     { expiresIn: "1d" }
   );
 
-  // const verificationLink = `${process.env.CLIENT_URL}/api/users/verify/${verificationToken}`;
-  const verificationLink = `${process.env.SERVER_URL}/api/users/verify/${verificationToken}`;
+  const verificationLink = `${process.env.CLIENT_URL}/verify-email`;
+  // const verificationLink = `${process.env.SERVER_URL}/api/users/verify/${verificationToken}`;
 
   try {
     await transporter.sendMail({
@@ -88,6 +88,7 @@ export const createUser = asyncHandler(async (req, res) => {
 
     res.status(201).json({
       message: `Account created for ${firstname}. Please check your email to verify your account.`,
+      user: user
     });
   } catch (error) {
     console.error("Email send error:", error);

@@ -1,104 +1,46 @@
-import React, { useState, useRef, useEffect, useContext} from 'react';
+import React, { useState, useRef, useEffect, useContext } from "react";
 import logo from "../assets/KSULogo.png";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-function ForgotPSW() {
-  const navigate = useNavigate();
+export default function EmailSender() {
   const [email, setEmail] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [responseMsg, setResponseMsg] = useState("");
+  const naigate = useNavigate()
 
-  // Password validation rules
-  const passwordPattern =
-    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z][A-Za-z\d@$!%*?&]{7,}$/;
-
-
-  const handleReset = async (e) => {
-    e.preventDefault();
-
-    if (!email || !username || !securityAnswer || !newPassword) {
-      setError("All fields are required.");
-      return;
-    }
-
-    // Password validation
-    if (!passwordPattern.test(newPassword)) {
-      setError(
-        "Password must be at least 8 characters, start with a letter, and include a letter, number, and special character."
-      );
-      return;
-    }
-
+  const sendEmailToBackend = async () => {
     try {
-      //Access database need to change here!!!
-      const userRef = doc(db, "users", username);
-      const userSnap = await getDoc(userRef);
+      const res = await fetch("http://localhost:8080/api/auth/forgotPassword", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
 
-      if (!userSnap.exists()) {
-        setError("User not found.");
-        return;
-      }
+      const data = await res.json();
+      setResponseMsg(data.message || "Success!");
 
-      const userData = userSnap.data();
-
-      // Check email matches
-      if (userData.email !== email) {
-        setError("Email does not match our records.");
-        return;
-      }
-
-      // Prevent reusing the old password
-      const passwordMatch = await compare(newPassword, userData.password);
-      if (passwordMatch) {
-        setError("You cannot reuse your previous password.");
-        return;
-      }
-      //update password
-      await updateDoc(userRef, { password: newPassword });
-
-      setError("");
-      setSuccess("Your password has been reset successfully.");
-    } catch (error) {
-      console.error("❌ Error resetting password:", error);
-      setError("Something went wrong. Please try again.");
+      
+    } catch (err) {
+      console.error("Error sending email:", err);
+      setResponseMsg("Error sending email");
     }
   };
-return (
+  return (
     <div className="auth-container">
-          <img src={logo} alt="KSU Logo" className="auth-logo" />
-      <h2 style={{color:'white'}}>Forgot Password</h2>
-      {success ? (
-        <p style={{ color: "green", fontWeight: "500" }}>{success}</p>
-      ) : (
-      <form onSubmit={handleReset}>
-        <input 
-          type="text" 
-          placeholder="email" 
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required 
-        />
-        <input 
-          type="password" 
-          placeholder="NewPassword" 
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-          required 
-          
-        />
-        <p
-        onClick={() => navigate("/")}
-        style={{ cursor: "pointer", color: "#4f46e5", marginTop: "0.5rem" }}
-      >
-        <button type="submit">Submit</button>
-      </p>
-        
-      </form>
-      )}
-    </div>
-  
-);
-}
+      <img src={logo} alt="KSU Logo" className="auth-logo" />
 
-export default ForgotPSW;
+      <h2 style={{ color: "white" }}>Forgot Password</h2>
+      <input
+        type="email"
+        placeholder="Enter email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+
+      <button onClick={sendEmailToBackend}>Send</button>
+
+      {responseMsg && <p>{responseMsg}</p>}
+    </div>
+  );
+}
