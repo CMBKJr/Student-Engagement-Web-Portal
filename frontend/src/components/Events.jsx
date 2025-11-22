@@ -3,6 +3,9 @@ import { useEventContext } from "../contexts/EventContext";
 import participationServices from "../api/participationServices";
 
 function Events({ events }) {
+  const [message, setMessage] = useState('');
+  const [err, setErr] = useState('');
+
   //const {isReg, addToReg, removeFromReg} = useEventContext()
   //const regEvent = isReg(events.id)
 
@@ -20,9 +23,20 @@ function Events({ events }) {
     try {
       const res = await participationServices.register({ userId, eventId });
       console.log(res.data);
+      setMessage(res.data.message)
+      setTimeout(function () {
+        // console.log("This message appears after 3 seconds.");
+        setMessage('')
+      }, 3000);
     } catch (error) {
       console.log(error.message);
+      setErr('Registration failed')
+      setTimeout(function () {
+        // console.log("This message appears after 3 seconds.");
+        setErr('')
+      }, 3000);
     }
+    
   };
   //   function onFlyer(flyerName) {
   //     alert("View flyer");
@@ -41,6 +55,8 @@ function Events({ events }) {
           {events.startAt && `${dateString} ${timeString}`}
         </p>
         <p>&#128205;{events.location}</p>
+        {message && <p style={{color: "green"}}>{message}</p>}
+        {err && <p style={{color: "red"}}>{err}</p>}
         <div className="button-container">
           <button className={"rsvp-button"} onClick={onRSVP}>
             RSVP

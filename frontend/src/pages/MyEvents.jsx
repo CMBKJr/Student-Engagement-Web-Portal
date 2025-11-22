@@ -9,9 +9,6 @@ import Navbar from "../components/Navbar";
 const MyEvents = () => {
   const [events, setEvents] = useState([]);
   const userId = localStorage.getItem("LoggedInID");
-  const dateObj = new Date(events.startAt);
-  const timeString = dateObj.toLocaleTimeString("en-US");
-  const dateString = dateObj.toLocaleDateString("en-US");
 
   const handeleUnregister = async (eventId) => {
     const userId = localStorage.getItem("LoggedInID");
@@ -62,6 +59,25 @@ const MyEvents = () => {
     fetchData();
   }, []);
 
+  if (events.length == 0) {
+    return (
+      <div>
+        <Navbar />
+        <div className="page-container myevent-main">
+          <header className="header">
+            <h1>Registered Events</h1>
+          </header>
+
+          <main className="main">
+            <section className="progress-section ">
+              No Registered events
+            </section>
+          </main>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="page-wrapper">
       <Navbar />
@@ -73,38 +89,44 @@ const MyEvents = () => {
         <main className="main">
           <section className="progress-section ">
             {events &&
-              events.map((event) => (
-                <div key={event.event._id} className="event-row">
-                  <button onClick={() => handleAttendance(event.event._id)}>
-                    Mark Attendance
-                  </button>
-                  <h3>{event.event.title}</h3>
-                  <p>{event.event.description}</p>
-                  <p>
-                    &#128198;
-                    {event.event.startAt && `${dateString} ${timeString}`}
-                  </p>
-                  <p>&#128205;{event.event.location}</p>
-                  <div className="button-container">
-                    <button
-                      className={"rsvp-button"}
-                      onClick={() => handeleUnregister(event.event._id)}
-                    >
-                      Unregister
+              events.map((event) => {
+                const dateObj = new Date(event.event.startAt);
+                const timeString = dateObj.toLocaleTimeString("en-US");
+                const dateString = dateObj.toLocaleDateString("en-US");
+                return (
+                  <div key={event.event._id} className="event-row">
+                    <button onClick={() => handleAttendance(event.event._id)}>
+                      Mark Attendance
                     </button>
 
-                    <button className="view-flyer  tooltip">
-                      View Flyer
-                      <img
-                        className="tooltiptext"
-                        src={event.event.flyerUrl}
-                        alt=""
-                      />
-                    </button>
+                    <h3>{event.event.title}</h3>
+                    <p>{event.event.description}</p>
+                    <p>
+                      &#128198;
+                      {event.event.startAt && `${dateString} ${timeString}`}
+                    </p>
+                    <p>&#128205;{event.event.location}</p>
+
+                    <div className="button-container">
+                      <button
+                        className={"rsvp-button"}
+                        onClick={() => handeleUnregister(event.event._id)}
+                      >
+                        Unregister
+                      </button>
+
+                      <button className="view-flyer  tooltip">
+                        View Flyer
+                        <img
+                          className="tooltiptext"
+                          src={event.event.flyerUrl}
+                          alt=""
+                        />
+                      </button>
+                    </div>
                   </div>
-                 
-                </div>
-              ))}
+                );
+              })}
           </section>
         </main>
       </div>

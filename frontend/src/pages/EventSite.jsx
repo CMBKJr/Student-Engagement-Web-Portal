@@ -4,6 +4,7 @@ import eventServices from "../api/eventServices";
 import { useEventContext } from "../contexts/EventContext";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 const EventSite = () => {
   //const {isReg, addToReg, removeFromReg} = useEventContext()
@@ -36,45 +37,67 @@ const EventSite = () => {
     fetchData();
   }, []);
 
-  return (
-    <div className="whiteBack events-page">
-      <nav className="event-nav">
-        <p className="event-sep">Student Engagement Portal</p>
-        <ul className="event-navlinks">
-          <li>
-            <Link to={"/"}>Home</Link>
-          </li>
-          <li>
-            <Link to={"/myevents"}>MyEvents</Link>
-          </li>
-          <li>
-            <Link to={"/attendance"}>Attendance</Link>
-          </li>
-          <li>
-            <Link to={"/profile"}>Profile</Link>
-          </li>
-        </ul>
-      </nav>
-      <main className="events-main">
-        <div>
-          {/* <div className="Event-Wall"> */}
-          <h2>Upcoming Events</h2>
-          {events.map((events, index) => (
-            <Events events={events} key={events._id} />
-          ))}
+  if (events.length == 0) {
+    return (
+      <div className="page-wrapper">
+        <Navbar />
+        <div className="page-container events-page">
+          <main className="events-main progress-section">
+            <div>
+              <header className="header">
+                <h2>Upcoming Events</h2>
+              </header>
 
-          <button>View all Events</button>
+              <p>No Upcoming Events</p>
+            </div>
+
+            <article className="notification">
+              <p>Notifications</p>
+              {notification.map((notification) => (
+                <Notifications
+                  notification={notification}
+                  key={notification.id}
+                />
+              ))}
+            </article>
+          </main>
+
+          <footer></footer>
         </div>
+      </div>
+    );
+  }
 
-        <article className="notification">
-          <p>Notifications</p>
-          {notification.map((notification) => (
-            <Notifications notification={notification} key={notification.id} />
-          ))}
-        </article>
-      </main>
+  return (
+    <div className="page-wrapper">
+      <Navbar />
+      <div className="page-container events-page">
+        <main className="events-main progress-section">
+          <div>
+            <header className="header">
+              <h2>Upcoming Events</h2>
+            </header>
 
-      <footer></footer>
+            {events.map((events, index) => (
+              <Events events={events} key={events._id} />
+            ))}
+
+            <button>View all Events</button>
+          </div>
+
+          <article className="notification">
+            <p>Notifications</p>
+            {notification.map((notification) => (
+              <Notifications
+                notification={notification}
+                key={notification.id}
+              />
+            ))}
+          </article>
+        </main>
+
+        <footer></footer>
+      </div>
     </div>
   );
 };
