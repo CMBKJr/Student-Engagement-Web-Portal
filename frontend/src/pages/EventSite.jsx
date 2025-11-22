@@ -3,8 +3,9 @@ import Events from "../components/Events";
 import eventServices from "../api/eventServices";
 import { useEventContext } from "../contexts/EventContext";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
-function EventSite() {
+const EventSite = () => {
   //const {isReg, addToReg, removeFromReg} = useEventContext()
   const [events, setEvents] = useState([]);
 
@@ -36,41 +37,47 @@ function EventSite() {
   }, []);
 
   return (
-    <>
-      <div className="whiteBack">
-        <nav>
-          <p>Student Engagement Portal</p>
-          <p>
-            Home&nbsp;&nbsp;&nbsp;Events&nbsp;&nbsp;&nbsp;Attendance&nbsp;&nbsp;&nbsp;Profile
-          </p>
-          <p>Notifications</p>
-          {notification.map((notification) => (
-            <Notifications notification={notification} key={notification.id} />
-          ))}
-        </nav>
-        <div className="Event-Wall">
+    <div className="whiteBack events-page">
+      <nav className="event-nav">
+        <p className="event-sep">Student Engagement Portal</p>
+        <ul className="event-navlinks">
+          <li>
+            <Link to={"/"}>Home</Link>
+          </li>
+          <li>
+            <Link to={"/"}>Events</Link>
+          </li>
+          <li>
+            <Link to={"/"}>Attendance</Link>
+          </li>
+          <li>
+            <Link to={"/"}>Profile</Link>
+          </li>
+        </ul>
+      </nav>
+      <main className="events-main">
+        <div>
+          {/* <div className="Event-Wall"> */}
           <h2>Registered Events</h2>
           <p>No registered events yet!</p>
           <h2>Upcoming Events</h2>
           {events.map((events, index) => (
             <Events events={events} key={events._id} />
           ))}
-          <h2>Events</h2>
-          <Events
-            events={{
-              id: 4,
-              title: "Event 4",
-              description: "eventdescr",
-              location: "eventloca",
-              date: "eventdate",
-              time: "eventtime",
-            }}
-          ></Events>
+
           <button>View all Events</button>
         </div>
-        <footer></footer>
-      </div>
-    </>
+
+        <article className="notification">
+          <p>Notifications</p>
+          {notification.map((notification) => (
+            <Notifications notification={notification} key={notification.id} />
+          ))}
+        </article>
+      </main>
+
+      <footer></footer>
+    </div>
   );
-}
+};
 export default EventSite;
