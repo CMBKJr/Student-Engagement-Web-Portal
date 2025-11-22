@@ -124,7 +124,7 @@ export const getRegisteredEvents = async (req, res) => {
       event: p.eventId,
     }));
 
-    res.status(200).json({ registeredEvents });
+    res.status(200).json(registeredEvents);
   } catch (error) {
     console.error("Error fetching registered events:", error);
     res
@@ -163,7 +163,7 @@ export const getAttendedEvents = async (req, res) => {
       event: p.eventId,
     }));
 
-    res.status(200).json({ attendedEvents });
+    res.status(200).json(attendedEvents);
   } catch (error) {
     console.error("Error fetching attended events:", error);
     res.status(500).json({ message: "Server error fetching attended events." });

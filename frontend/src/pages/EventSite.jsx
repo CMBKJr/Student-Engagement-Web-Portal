@@ -45,21 +45,19 @@ const EventSite = () => {
             <Link to={"/"}>Home</Link>
           </li>
           <li>
-            <Link to={"/"}>Events</Link>
+            <Link to={"/myevents"}>MyEvents</Link>
           </li>
           <li>
-            <Link to={"/"}>Attendance</Link>
+            <Link to={"/attendance"}>Attendance</Link>
           </li>
           <li>
-            <Link to={"/"}>Profile</Link>
+            <Link to={"/profile"}>Profile</Link>
           </li>
         </ul>
       </nav>
       <main className="events-main">
         <div>
           {/* <div className="Event-Wall"> */}
-          <h2>Registered Events</h2>
-          <p>No registered events yet!</p>
           <h2>Upcoming Events</h2>
           {events.map((events, index) => (
             <Events events={events} key={events._id} />

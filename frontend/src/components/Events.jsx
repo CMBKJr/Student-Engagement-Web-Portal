@@ -12,14 +12,14 @@ function Events({ events }) {
   //   }
   const onRSVP = async () => {
     const userId = localStorage.getItem("LoggedInID");
-    const eventId = events._id
-    if(!userId){
-        console.log('No user logged In')
+    const eventId = events._id;
+    if (!userId) {
+      console.log("No user logged In");
     }
 
     try {
-      const res = await participationServices.register({userId, eventId});
-      console.log(res.data)
+      const res = await participationServices.register({ userId, eventId });
+      console.log(res.data);
     } catch (error) {
       console.log(error.message);
     }

@@ -6,7 +6,7 @@ const register = (payload) => {
   return axios.post(`${baseUrl}api/participate/register`, payload);
 };
 const getRegisteredEvents = (id) => {
-  return axios.get(`${baseUrl}api/participate/register/${id}`);
+  return axios.get(`${baseUrl}api/participate/registered/${id}`);
 };
 const getAttendedEvents = (id) => {
   return axios.get(`${baseUrl}api/participate/attended/${id}`);

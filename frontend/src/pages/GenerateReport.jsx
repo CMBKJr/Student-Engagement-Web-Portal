@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import generateReport from "../api/generateReport";
+import Navbar from "../components/Navbar";
 
 const GenerateReport = () => {
   const [report, setReport] = useState();
@@ -17,7 +18,7 @@ const GenerateReport = () => {
     fetchData();
   }, []);
 
-  if (!report)
+  if (!report) {
     return (
       <div className="page-container">
         <header className="header">
@@ -32,66 +33,70 @@ const GenerateReport = () => {
         </main>
       </div>
     );
+  }
 
   return (
-    <div className="page-container">
-      <header className="header">
-        <h1>
-          Generate Student Engagement Report
-          <p>Track students engagement trends</p>
-        </h1>
-      </header>
+    <div className="page-wrapper">
+      <Navbar />
+      <div className="page-container">
+        <header className="header">
+          <h1>
+            Generate Student Engagement Report
+            <p>Track students engagement trends</p>
+          </h1>
+        </header>
 
-      <main className="main">
-        <section className="progress-section">
-          <h2 className="generate-h2">Past Events</h2>
+        <main className="main">
+          <section className="progress-section">
+            <h2 className="generate-h2">Past Events</h2>
 
-          <table className="generate-table">
-            <thead>
-              <tr>
-                <th>Event Name</th>
-                <th>Total Registration</th>
-                <th>Total Attendance</th>
-                <th>Total No Show</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {report.pastEvents.map((event, index) => (
-                <tr key={index}>
-                  <td>{event.title}</td>
-                  <td>{event.totalRegistered}</td>
-                  <td>{event.totalAttended}</td>
-                  <td>{event.totalNoShow}</td>
+            <table className="generate-table">
+              <thead>
+                <tr>
+                  <th>Event Name</th>
+                  <th>Total Registration</th>
+                  <th>Total Attendance</th>
+                  <th>Total No Show</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </section>
-        <br />
+              </thead>
 
-        <section className="progress-section">
-          <h2 className="generate-h2">Upcoming Events</h2>
+              <tbody>
+                {report.pastEvents.map((event, index) => (
+                  <tr key={index}>
+                    <td>{event.title}</td>
+                    <td>{event.totalRegistered}</td>
+                    <td>{event.totalAttended}</td>
+                    <td>{event.totalNoShow}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
+          <br />
 
-          <table className="generate-table">
-            <thead>
-              <tr>
-                <th>Event Name</th>
-                <th>Total Registration</th>
-              </tr>
-            </thead>
+          <section className="progress-section">
+            <h2 className="generate-h2">Upcoming Events</h2>
 
-            <tbody>
-              {report.upcomingEvents.map((event, index) => (
-                <tr key={index}>
-                  <td>{event.title}</td>
-                  <td>{event.registeredCount}</td>
+            <table className="generate-table">
+              <thead>
+                <tr>
+                  <th>Event Name</th>
+                  <th>Total Registration</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </section>
-      </main>
+              </thead>
+
+              <tbody>
+                {report.upcomingEvents.map((event, index) => (
+                  <tr key={index}>
+                    <td>{event.title}</td>
+                    <td>{event.registeredCount}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
+        </main>
+      </div>
     </div>
   );
 };

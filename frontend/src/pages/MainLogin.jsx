@@ -41,6 +41,7 @@ const MainLogin = () => {
         localStorage.setItem('LoggedInRole', res.data.user.role);
         localStorage.setItem('LoggedInEmail', res.data.user.email);
         localStorage.setItem('LoggedInLastName', res.data.user.lastname);
+        localStorage.setItem('LoggedInPicture', res.data.user.picture);
       }
       console.log(res.data);
       navigate("/event");
