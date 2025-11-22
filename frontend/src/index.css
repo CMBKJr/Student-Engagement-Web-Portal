@@ -505,11 +505,11 @@ h1 {
 }
 
 .navbar {
-  width: 100vw;         /* full viewport width */
+  width: 100vw;       
   max-width: 100vw;
   background-color: white;
-  position: relative;   /* always safe */
-  left: 50%;            /* break out of body centering */
+  position: relative;   
+  left: 50%;            
   right: 50%;
   margin-left: -50vw; 
   padding: 0 30px; 
