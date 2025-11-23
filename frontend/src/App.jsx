@@ -26,7 +26,7 @@ function App() {
         <Route path="/milestone" element={<Milestone />} />
         <Route path="/resetPSW/:token" element={<ResetPSW />} />
         <Route path="/event" element={<Event />} />
-        <Route path="/verify-email" element={<EmailVerified />} />
+        <Route path="/verify-email/:token" element={<EmailVerified />} />
         <Route path="/generate-report" element={<GenerateReport />} />
         <Route path="/myevents" element={<MyEvents />} />
         <Route path="/attendance" element={<Attendance />} />

@@ -10,16 +10,19 @@ const Navbar = () => {
         <p className="event-sep">Student Engagement Portal</p>
         <ul className="event-navlinks">
           <li>
-            <Link to={"/"}>Home</Link>
+            <Link to={"/event"}>Home</Link>
           </li>
-          <li>
+          {/* <li>
             <Link to={"/event"}>All Events</Link>
-          </li>
+          </li> */}
           <li>
             <Link to={"/myevents"}>MyEvents</Link>
           </li>
           <li>
             <Link to={"/attendance"}>Attendance</Link>
+          </li>
+          <li>
+            <Link to={"/milestone"}>Milestone</Link>
           </li>
           <li>
             <Link to={"/profile"}>Profile</Link>

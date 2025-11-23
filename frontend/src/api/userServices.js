@@ -20,6 +20,11 @@ const deleteUser = (id) => {
 const login = (userDetail) => {
   return axios.post(`${baseUrl}api/auth/`, userDetail);
 };
+const verifyEmail = (token) => {
+  return axios.get(`${baseUrl}api/users/verify/${token}`);
+};
+
+
 
 export default {
   create,
@@ -28,4 +33,5 @@ export default {
   updateUser,
   deleteUser,
   login,
+  verifyEmail
 };
