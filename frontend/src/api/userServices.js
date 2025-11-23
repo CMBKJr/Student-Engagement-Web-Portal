@@ -23,6 +23,9 @@ const login = (userDetail) => {
 const verifyEmail = (token) => {
   return axios.get(`${baseUrl}api/users/verify/${token}`);
 };
+const logout = () => {
+  return axios.post(`${baseUrl}auth/logout`)
+}
 
 
 
@@ -33,5 +36,6 @@ export default {
   updateUser,
   deleteUser,
   login,
-  verifyEmail
+  verifyEmail,
+  logout
 };

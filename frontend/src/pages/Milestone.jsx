@@ -103,7 +103,7 @@ export default function Milestone({ attendedCount }) {
                       : `${m} Milestones`}
                   </div>
                   <p className="milestone-status">
-                    {achievedMilestones.has(m) ? "Unlocked" : "Locked"}
+                    { completeMilestone.length >= m ? "Unlocked" : "Locked"}
                   </p>
                 </li>
               ))}
