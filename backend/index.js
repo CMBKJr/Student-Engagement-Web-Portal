@@ -6,6 +6,7 @@ import eventRoutes from "./routes/eventRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import participationRoutes from "./routes/participationRoutes.js";
+import milestoneRoutes from './routes/milestoneRoutes.js'
 import cookieParser from "cookie-parser";
 import cron from "node-cron";
 import { ingestRssAlone } from "./transformRss.js";
@@ -14,7 +15,6 @@ import { milestoneModel } from "./model/milestoneModel.js";
 import jwt from "jsonwebtoken";
 import multer from "multer";
 
-// import milestoneRoutes from './routes/milestoneRoutes.js'
 
 dotenv.config();
 
@@ -39,6 +39,7 @@ app.use("/api/events", eventRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/participate", participationRoutes);
+app.use("/api/milestone", milestoneRoutes);
 
 // automate rss ingest
 cron.schedule("0 1 * * *", ingestRssAlone, {

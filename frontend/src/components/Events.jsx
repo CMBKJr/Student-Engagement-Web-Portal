@@ -1,33 +1,75 @@
 import { useState } from "react";
-import {useEventContext} from "../contexts/EventContext"
-function Events({events}) {
-//const {isReg, addToReg, removeFromReg} = useEventContext()
-//const regEvent = isReg(events.id)
+import { useEventContext } from "../contexts/EventContext";
+import participationServices from "../api/participationServices";
 
-    function onRSVP() {
-        addToReg(events)
+function Events({ events }) {
+  const [message, setMessage] = useState('');
+  const [err, setErr] = useState('');
+
+  //const {isReg, addToReg, removeFromReg} = useEventContext()
+  //const regEvent = isReg(events.id)
+
+  //   function onRSVP() {
+  //     // addToReg(events);
+  //     try
+  //   }
+  const onRSVP = async () => {
+    const userId = localStorage.getItem("LoggedInID");
+    const eventId = events._id;
+    if (!userId) {
+      console.log("No user logged In");
     }
-    function onFlyer(flyerName) {
-        alert("View flyer")
+
+    try {
+      const res = await participationServices.register({ userId, eventId });
+      console.log(res.data);
+      setMessage(res.data.message)
+      setTimeout(function () {
+        // console.log("This message appears after 3 seconds.");
+        setMessage('')
+      }, 3000);
+    } catch (error) {
+      console.log(error.message);
+      setErr('Registration failed')
+      setTimeout(function () {
+        // console.log("This message appears after 3 seconds.");
+        setErr('')
+      }, 3000);
     }
-    return (
-        <>
- <div style={{border: '1px solid lightgray', textAlign:"left", fontSize: '13px', width: '1000px', marginRight: '800px', borderRadius:'10px'}} className="event-row">
-            <h4>{events.title}</h4>
-            <p>{events.description}</p>
-            <p>&#128198;{events.date} @ {events.time}</p>  
-                <p>&#128205;{events.location}</p>
-                <div className="button-container" style={{display: "flex", gap:'10px', marginLeft:'700px', marginBottom: '10px'}}>
-            <button style={{backgroundColor:'gold', color:'black'}}className={"rsvp-button"} onClick={onRSVP}>
-                RSVP
-            </button>
-            <button style={{backgroundColor:'black', color:'white'}}className="view-flyer" onClick={onFlyer}>View Flyer</button>
+    
+  };
+  //   function onFlyer(flyerName) {
+  //     alert("View flyer");
+  //   }
+
+  const dateObj = new Date(events.startAt);
+  const timeString = dateObj.toLocaleTimeString("en-US");
+  const dateString = dateObj.toLocaleDateString("en-US");
+  return (
+    <>
+      <div className="event-row">
+        <h4>{events.title}</h4>
+        <p>{events.description}</p>
+        <p>
+          &#128198;
+          {events.startAt && `${dateString} ${timeString}`}
+        </p>
+        <p>&#128205;{events.location}</p>
+        {message && <p style={{color: "green"}}>{message}</p>}
+        {err && <p style={{color: "red"}}>{err}</p>}
+        <div className="button-container">
+          <button className={"rsvp-button"} onClick={onRSVP}>
+            RSVP
+          </button>
+          <button className="view-flyer  tooltip">
+            {/* <button className="view-flyer  tooltip" onClick={onFlyer}> */}
+            View Flyer
+            <img className="tooltiptext" src={events.flyerUrl} alt="" />
+          </button>
         </div>
-        </div>
-        <br>
-        </br>
-        
+      </div>
+      <br></br>
     </>
-    )
+  );
 }
 export default Events;

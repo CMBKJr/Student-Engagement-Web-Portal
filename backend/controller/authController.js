@@ -59,6 +59,7 @@ export const login = asyncHandler(async (req, res) => {
     message: "Login successful",
     user: {
       id: foundUser._id,
+      picture: foundUser.displayImageUrl,
       firstname: foundUser.firstname,
       lastname: foundUser.lastname,
       email: foundUser.email,

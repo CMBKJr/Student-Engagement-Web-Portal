@@ -69,8 +69,8 @@ export const createUser = asyncHandler(async (req, res) => {
     { expiresIn: "1d" }
   );
 
-  // const verificationLink = `${process.env.CLIENT_URL}/api/users/verify/${verificationToken}`;
-  const verificationLink = `${process.env.SERVER_URL}/api/users/verify/${verificationToken}`;
+  const verificationLink = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
+  // const verificationLink = `${process.env.SERVER_URL}/api/users/verify/${verificationToken}`;
 
   try {
     await transporter.sendMail({
@@ -88,6 +88,7 @@ export const createUser = asyncHandler(async (req, res) => {
 
     res.status(201).json({
       message: `Account created for ${firstname}. Please check your email to verify your account.`,
+      user: user
     });
   } catch (error) {
     console.error("Email send error:", error);
@@ -152,9 +153,9 @@ export const verifyEmail = asyncHandler(async (req, res) => {
     const user = await userModel.findOne({ email: decoded.email });
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    if (user.isVerified) {
-      return res.status(200).json({ message: "Email already verified" });
-    }
+    // if (user.isVerified) {
+    //   return res.status(200).json({ message: "Email already verified" });
+    // }
 
     user.isVerified = true;
     await user.save();
@@ -166,5 +167,3 @@ export const verifyEmail = asyncHandler(async (req, res) => {
   }
 });
 
-// login 
-export const login = asyncHandler(async (req, res) => {})

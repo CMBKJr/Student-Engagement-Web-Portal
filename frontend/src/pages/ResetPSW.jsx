@@ -12,13 +12,14 @@ function ResetPSW() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate()
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
 
-    // 🔒 Client-side check for matching passwords
+    //  Client-side check for matching passwords
     if (newPassword !== confirmPassword) {
       setError("Passwords do not match.");
       return;
@@ -50,6 +51,10 @@ function ResetPSW() {
       // setToken("");
       setNewPassword("");
       setConfirmPassword("");
+      setTimeout(function () {
+        // console.log("This message appears after 3 seconds.");
+        navigate('/')
+      }, 3000);
 
     } catch (err) {
       setError(err.message);

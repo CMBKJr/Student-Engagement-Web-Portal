@@ -1,22 +1,12 @@
-import mongoose from "mongoose";
-import { milestoneModel } from "../model/milestoneModel.js";
-import asyncHandler from "express-async-handler";
+import express from "express";
+import { createMilestone, getMilestones, getCompletedMilestones } from "../controller/milestoneController.js";
 
+const router = express.Router();
 
-export const createMilestone = asyncHandler(async (req, res) => {
-  const { title, description, stage } = req.body;
+router.get("/", getMilestones);
 
-  if (!title || !description || !stage) {
-    return res.status(400).json({ message: "All fields are required" });
-  }
-  const milestone = await milestoneModel.create({
-    title,
-    description,
-    stage
-  });
+router.post("/", createMilestone);
 
-  if (!milestone) {
-    return res.status(400).json({ message: "Invalid user data received" });
-  }
-});
+router.post("/get-completed", getCompletedMilestones);
 
+export default router;
