@@ -17,6 +17,9 @@ const updateEvent = (id, user) => {
 const deleteEvent = (id) => {
   return axios.delete(`${baseUrl}api/events/${id}`);
 };
+const ingest = () => {
+  return axios.post(`${baseUrl}api/events/ingest`)
+}
 
 
 export default {
@@ -25,4 +28,5 @@ export default {
   getAll,
   updateEvent,
   deleteEvent,
+  ingest
 };

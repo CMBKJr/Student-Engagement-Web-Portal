@@ -6,6 +6,7 @@ import {
   updateEvent,
   deleteEvent,
 } from "../controller/eventController.js";
+import { ingestRssAlone } from "../transformRss.js";
 // import { verifyJWT } from "../middleware/verifyJWT.js";
 // import multer from "multer";
 
@@ -20,6 +21,8 @@ router.get("/", getEvents);
 router.get("/:id", getEvent);
 
 router.post("/", createEvent);
+
+router.post("/ingest", ingestRssAlone);
 
 router.patch("/:id", updateEvent);
 

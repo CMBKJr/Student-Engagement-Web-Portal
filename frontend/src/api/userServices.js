@@ -27,8 +27,6 @@ const logout = () => {
   return axios.post(`${baseUrl}auth/logout`)
 }
 
-
-
 export default {
   create,
   getOne,

@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 import AuthContext from "../contexts/AuthProvider";
 import userServices from "../api/userServices";
 
-import axios from "../api/axios";
-
 const LOGIN_URL = "/auth";
 
 const MainLogin = () => {
@@ -35,16 +33,20 @@ const MainLogin = () => {
         email,
         password,
       });
-      if(res.data.user) {
-        localStorage.setItem('LoggedInFirstName', res.data.user.firstname);
-        localStorage.setItem('LoggedInID', res.data.user.id);
-        localStorage.setItem('LoggedInRole', res.data.user.role);
-        localStorage.setItem('LoggedInEmail', res.data.user.email);
-        localStorage.setItem('LoggedInLastName', res.data.user.lastname);
-        localStorage.setItem('LoggedInPicture', res.data.user.picture);
+      if (res.data.user) {
+        localStorage.setItem("LoggedInFirstName", res.data.user.firstname);
+        localStorage.setItem("LoggedInID", res.data.user.id);
+        localStorage.setItem("LoggedInRole", res.data.user.role);
+        localStorage.setItem("LoggedInEmail", res.data.user.email);
+        localStorage.setItem("LoggedInLastName", res.data.user.lastname);
+        localStorage.setItem("LoggedInPicture", res.data.user.picture);
       }
       console.log(res.data);
-      navigate("/event");
+      if (res.data.user.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/event");
+      }
     } catch (error) {
       console.log(error.message);
     }

@@ -48,6 +48,9 @@
 - [ ] Admin needs to be able to issue digital certificates and manage badge criteria
 
 ### Frontend Checklist
-
 - [ ] Admin dashboard
 - [ ] User update/profile
+
+
+### Things to Note
+- Past events should not be on the events pay (if production)

@@ -72,7 +72,7 @@ export async function transformRssToEventsArray() {
 }
 
 
-export async function ingestRssAlone() {
+export async function ingestRssAlone(req, res) {
   const eventsFromRss = await transformRssToEventsArray();
   let createdCount = 0;
   let skippedCount = 0;
@@ -154,11 +154,11 @@ export async function ingestRssAlone() {
     console.error("Email send error:", error);
   }
 
-  return {
+  return res.status(200).json({
     message: "RSS Sync Complete.",
     created: createdCount,
     skipped: skippedCount,
-  };
+  });
 }
 
 // ingestRssAlone()

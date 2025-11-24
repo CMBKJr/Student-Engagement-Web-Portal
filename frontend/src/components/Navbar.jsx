@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../../firebase";
 import userServices from "../api/userServices";
+import logo from "../assets/KSULogo-nav.png";
 
 const Navbar = () => {
   const [profileClick, setProfileClick] = useState(false);
@@ -25,7 +26,7 @@ const Navbar = () => {
         displayImageUrl: imageUrl,
       });
 
-      console.log(res.data)
+      console.log(res.data);
 
       localStorage.setItem("LoggedInPicture", imageUrl);
       window.location.reload();
@@ -42,6 +43,8 @@ const Navbar = () => {
   return (
     <div>
       <nav className="event-nav navbar">
+        <img className='nav-logo' src={logo} alt="KSU Logo" />
+
         <p className="event-sep">Student Engagement Portal</p>
         <ul className="event-navlinks">
           <li>
