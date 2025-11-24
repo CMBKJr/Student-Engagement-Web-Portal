@@ -1,9 +1,38 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "../../firebase";
+import userServices from "../api/userServices";
 
 const Navbar = () => {
   const [profileClick, setProfileClick] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+
   const picture = localStorage.getItem("LoggedInPicture");
+  const userId = localStorage.getItem("LoggedInID");
+
+  const uploadImageToFirebase = async (file) => {
+    const fileRef = ref(storage, `users/${Date.now()}-${file.name}`);
+    await uploadBytes(fileRef, file);
+    const downloadURL = await getDownloadURL(fileRef);
+    return downloadURL;
+  };
+
+  const handleImageUpload = async (file) => {
+    try {
+      const imageUrl = await uploadImageToFirebase(file);
+      const res = await userServices.updateUser(userId, {
+        displayImageUrl: imageUrl,
+      });
+
+      console.log(res.data)
+
+      localStorage.setItem("LoggedInPicture", imageUrl);
+      window.location.reload();
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const handleProfileClick = (event) => {
     event.preventDefault();
@@ -36,14 +65,21 @@ const Navbar = () => {
         </ul>
         {/* <img src={picture} alt="" /> */}
       </nav>
-      {profileClick && <ProfileIconMore />}
+      {profileClick && (
+        <ProfileIconMore
+          onFileSelect={(file) => {
+            setSelectedFile(file);
+            handleImageUpload(file);
+          }}
+        />
+      )}
     </div>
   );
 };
 
-const ProfileIconMore = () => {
+const ProfileIconMore = ({ onFileSelect }) => {
   const [display, setDisplay] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const logout = async () => {
     try {
       // const res = await userServices.logout();
@@ -71,9 +107,18 @@ const ProfileIconMore = () => {
   return (
     <>
       <div className="more-profile">
-        <span onClick={handleDisplay} className="ui-nav">Update Image</span>
+        <span onClick={handleDisplay} className="ui-nav">
+          Update Image
+        </span>
 
-        {display && <input className="input-nav" type="file" name="" id="" />}
+        {display && (
+          <input
+            className="input-nav"
+            type="file"
+            accept="image/*"
+            onChange={(e) => onFileSelect(e.target.files[0])}
+          />
+        )}
 
         <button onClick={logout} className="signout">
           Sign Out

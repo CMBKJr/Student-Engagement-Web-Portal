@@ -1,6 +1,7 @@
 import Notifications from "../components/Notifications";
 import Events from "../components/Events";
 import eventServices from "../api/eventServices";
+import participationServices from "../api/participationServices";
 import { useEventContext } from "../contexts/EventContext";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -9,6 +10,16 @@ import Navbar from "../components/Navbar";
 const EventSite = () => {
   //const {isReg, addToReg, removeFromReg} = useEventContext()
   const [events, setEvents] = useState([]);
+  const [registerd, setRegistered] = useState([]);
+  const [attented, setAttended] = useState([]);
+  const userId = localStorage.getItem("LoggedInID");
+
+  let engagedEvents = registerd.concat(attented);
+  const engagedEventsTitle = [];
+
+  for (const engaged of engagedEvents) {
+    engagedEventsTitle.push(engaged.event.title);
+  }
 
   const notification = [
     {
@@ -26,7 +37,30 @@ const EventSite = () => {
 
       if (res.data) {
         setEvents(res.data);
-        console.log(res.data);
+        // console.log(res.data);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const fetchAtt = async () => {
+    try {
+      const res = await participationServices.getAttendedEvents(userId);
+      if (res.data) {
+        // console.log(res.data);
+        setAttended(res.data);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  const fetchReg = async () => {
+    try {
+      const res = await participationServices.getRegisteredEvents(userId);
+      if (res.data) {
+        // console.log(res.data);
+        setRegistered(res.data);
       }
     } catch (error) {
       console.log(error.message);
@@ -34,8 +68,15 @@ const EventSite = () => {
   };
 
   useEffect(() => {
+    fetchAtt();
     fetchData();
+    fetchReg();
   }, []);
+
+  const refreshAll = () => {
+    fetchAtt();
+    fetchReg();
+  };
 
   if (events.length == 0) {
     return (
@@ -79,7 +120,12 @@ const EventSite = () => {
             </header>
 
             {events.map((events, index) => (
-              <Events events={events} key={events._id} />
+              <Events
+                events={events}
+                onRefresh={refreshAll}
+                engagedEventsTitle={engagedEventsTitle}
+                key={events._id}
+              />
             ))}
 
             <button>View all Events</button>

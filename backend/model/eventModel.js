@@ -48,4 +48,12 @@ const eventSchema = new Schema(
   { timestamps: true }
 );
 
+eventSchema.pre("findOneAndDelete", async function (next) {
+  const eventId = this.getQuery()["_id"];
+
+  await mongoose.model("EventParticipation").deleteMany({ eventId });
+
+  next();
+});
+
 export const eventModel = mongoose.model("Event", eventSchema);

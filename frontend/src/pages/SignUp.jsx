@@ -11,7 +11,8 @@ export default function SignUp() {
     password: "",
   });
 
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState("");
+  const [err, setErr] = useState("");
 
   // Handle input changes
   const handleChange = (e) => {
@@ -46,15 +47,15 @@ export default function SignUp() {
   // };
 
   const createUser = async (e) => {
-     e.preventDefault();
+    e.preventDefault();
     try {
       const res = await userServices.create(form);
       console.log("User created:", res.data);
-      setMessage(res.data.message)
+      setMessage(res.data.message);
       // alert("User created successfully!");
     } catch (error) {
       console.error(error.message);
-      setMessage(err.message)
+      setErr(error.response?.data?.message || error.message);
     }
   };
 
@@ -94,9 +95,12 @@ export default function SignUp() {
           onChange={handleChange}
         />
 
-        {
-          message && <p className="feedback-message">{message}</p>
-        }
+        {message && <p className="feedback-message">{message}</p>}
+        {err && (
+          <p style={{ color: "red" }} className="feedback-message">
+            {err}
+          </p>
+        )}
         <button type="submit">Create User</button>
       </form>
     </div>

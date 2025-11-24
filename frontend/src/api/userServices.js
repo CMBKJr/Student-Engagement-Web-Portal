@@ -3,7 +3,7 @@ import axios from "axios";
 const baseUrl = "http://localhost:8080/";
 
 const create = (user) => {
-  return axios.post(`${baseUrl}api/users`, user);
+  return axios.post(`${baseUrl}api/users/`, user);
 };
 const getOne = (id) => {
   return axios.get(`${baseUrl}api/users/${id}`);
@@ -12,7 +12,7 @@ const getAll = () => {
   return axios.get(`${baseUrl}api/users`);
 };
 const updateUser = (id, user) => {
-  return axios.patch(`${baseUrl}api/users`, user);
+  return axios.patch(`${baseUrl}api/users/${id}`, user);
 };
 const deleteUser = (id) => {
   return axios.delete(`${baseUrl}api/users/${id}`);

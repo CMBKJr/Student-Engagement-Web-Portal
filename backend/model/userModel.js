@@ -51,4 +51,10 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
+userSchema.pre("findOneAndDelete", async function (next) {
+  const userId = this.getQuery()["_id"];
+  await mongoose.model("EventParticipation").deleteMany({ userId });
+  next();
+});
+
 export const userModel = mongoose.model("User", userSchema);

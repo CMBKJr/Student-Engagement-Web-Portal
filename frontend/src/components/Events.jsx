@@ -1,20 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useEventContext } from "../contexts/EventContext";
 import participationServices from "../api/participationServices";
 
-function Events({ events }) {
-  const [message, setMessage] = useState('');
-  const [err, setErr] = useState('');
+function Events({ events, engagedEventsTitle, onRefresh }) {
+  const dateObj = new Date(events.startAt);
+  const timeString = dateObj.toLocaleTimeString("en-US");
+  const dateString = dateObj.toLocaleDateString("en-US");
+  const [message, setMessage] = useState("");
+  const [err, setErr] = useState("");
+  const userId = localStorage.getItem("LoggedInID");
 
-  //const {isReg, addToReg, removeFromReg} = useEventContext()
-  //const regEvent = isReg(events.id)
-
-  //   function onRSVP() {
-  //     // addToReg(events);
-  //     try
-  //   }
   const onRSVP = async () => {
-    const userId = localStorage.getItem("LoggedInID");
     const eventId = events._id;
     if (!userId) {
       console.log("No user logged In");
@@ -23,28 +19,25 @@ function Events({ events }) {
     try {
       const res = await participationServices.register({ userId, eventId });
       console.log(res.data);
-      setMessage(res.data.message)
+      setMessage(res.data.message);
+
+     if (onRefresh) onRefresh();
+
+
       setTimeout(function () {
-        // console.log("This message appears after 3 seconds.");
-        setMessage('')
+        // console.log("waits 3 seconds.");
+        setMessage("");
       }, 3000);
     } catch (error) {
       console.log(error.message);
-      setErr('Registration failed')
+      setErr("Registration failed");
       setTimeout(function () {
-        // console.log("This message appears after 3 seconds.");
-        setErr('')
+        // console.log("waits 3 seconds.");
+        setErr("");
       }, 3000);
     }
-    
   };
-  //   function onFlyer(flyerName) {
-  //     alert("View flyer");
-  //   }
 
-  const dateObj = new Date(events.startAt);
-  const timeString = dateObj.toLocaleTimeString("en-US");
-  const dateString = dateObj.toLocaleDateString("en-US");
   return (
     <>
       <div className="event-row">
@@ -55,14 +48,15 @@ function Events({ events }) {
           {events.startAt && `${dateString} ${timeString}`}
         </p>
         <p>&#128205;{events.location}</p>
-        {message && <p style={{color: "green"}}>{message}</p>}
-        {err && <p style={{color: "red"}}>{err}</p>}
+        {message && <p style={{ color: "green" }}>{message}</p>}
+        {err && <p style={{ color: "red" }}>{err}</p>}
         <div className="button-container">
-          <button className={"rsvp-button"} onClick={onRSVP}>
-            RSVP
-          </button>
+          {!engagedEventsTitle.includes(events.title) && (
+            <button className={"rsvp-button"} onClick={onRSVP}>
+              RSVP
+            </button>
+          )}
           <button className="view-flyer  tooltip">
-            {/* <button className="view-flyer  tooltip" onClick={onFlyer}> */}
             View Flyer
             <img className="tooltiptext" src={events.flyerUrl} alt="" />
           </button>

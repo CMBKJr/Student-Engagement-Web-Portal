@@ -5,8 +5,6 @@ import bcrypt from "bcrypt";
 import { transporter } from "../config/emailConfig.js";
 import jwt from "jsonwebtoken";
 
-
-
 // get all users
 // get method
 export const getUsers = asyncHandler(async (req, res) => {
@@ -42,6 +40,10 @@ export const createUser = asyncHandler(async (req, res) => {
 
   if (!firstname || !lastname || !email || !password) {
     return res.status(400).json({ message: "All fields are required" });
+  }
+
+  if (email.slice(-12) !== 'kennesaw.edu') {
+    return res.status(400).json({ message: "Use kennesaw.edu email" });
   }
 
   const duplicate = await userModel.findOne({ email }).lean().exec();
@@ -88,7 +90,7 @@ export const createUser = asyncHandler(async (req, res) => {
 
     res.status(201).json({
       message: `Account created for ${firstname}. Please check your email to verify your account.`,
-      user: user
+      user: user,
     });
   } catch (error) {
     console.error("Email send error:", error);
@@ -99,7 +101,7 @@ export const createUser = asyncHandler(async (req, res) => {
 // update user
 // patch method
 export const updateUser = asyncHandler(async (req, res) => {
-  const {  email } = req.body;
+  const { email } = req.body;
   const id = req.params.id;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -113,7 +115,11 @@ export const updateUser = asyncHandler(async (req, res) => {
     return res.status(409).json({ message: "Duplicate email" });
   }
 
-  const user = await userModel.findByIdAndUpdate(id, { ...req.body }, { new: true });
+  const user = await userModel.findByIdAndUpdate(
+    id,
+    { ...req.body },
+    { new: true }
+  );
   if (!user) {
     return res.status(400).json({ message: "User not found" });
   }
@@ -142,7 +148,6 @@ export const deleteUser = asyncHandler(async (req, res) => {
     .json({ user, message: `${user.firstname} ${user.lastname} deleted` });
 });
 
-
 // verify email
 export const verifyEmail = asyncHandler(async (req, res) => {
   const { token } = req.params;
@@ -166,4 +171,3 @@ export const verifyEmail = asyncHandler(async (req, res) => {
     res.status(400).json({ message: "Invalid or expired token" });
   }
 });
-
