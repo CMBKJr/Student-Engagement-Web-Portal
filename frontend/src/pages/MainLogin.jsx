@@ -136,7 +136,7 @@ const MainLogin = () => {
       >
         Forgot Password?
       </p>
-      <div>
+      {/* <div>
         <p
           onClick={() => setShowDropdown(!showDropdown)}
           style={{
@@ -165,7 +165,7 @@ const MainLogin = () => {
             </p>
           </div>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };
