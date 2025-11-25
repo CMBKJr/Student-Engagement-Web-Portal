@@ -4,13 +4,14 @@ import eventServices from "../api/eventServices";
 
 export default function Events() {
   const [events, setEvents] = useState([]);
+  const adminEmail = localStorage.getItem('LoggedInEmail')
 
   const dialogRef = useRef(null);
   const openModal = () => dialogRef.current?.showModal();
   const previewRSS = () => alert("TODO: server preview of RSS feed");
   const ingestRSS = async () => {
     try {
-      const res = await eventServices.ingest();
+      const res = await eventServices.ingest({adminEmail});
       // console.log(res)
       if (res.data) {
         console.log(res.data);

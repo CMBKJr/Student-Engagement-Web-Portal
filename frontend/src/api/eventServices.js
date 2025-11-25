@@ -17,8 +17,8 @@ const updateEvent = (id, user) => {
 const deleteEvent = (id) => {
   return axios.delete(`${baseUrl}api/events/${id}`);
 };
-const ingest = () => {
-  return axios.post(`${baseUrl}api/events/ingest`)
+const ingest = (adminEmail) => {
+  return axios.post(`${baseUrl}api/events/ingest`, adminEmail)
 }
 
 

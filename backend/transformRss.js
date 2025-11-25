@@ -71,8 +71,100 @@ export async function transformRssToEventsArray() {
   });
 }
 
-
 export async function ingestRssAlone(req, res) {
+  const {adminEmail} = req.body;
+
+  const eventsFromRss = await transformRssToEventsArray();
+  let createdCount = 0;
+  let skippedCount = 0;
+
+  for (const eventData of eventsFromRss) {
+    if (!eventData.externalId) {
+      console.warn(
+        "Skipping event due to missing externalId in RSS item:",
+        eventData.title
+      );
+      skippedCount++;
+      continue;
+    }
+
+    const existingEvent = await eventModel.findOne({
+      externalId: eventData.externalId,
+    });
+
+    if (existingEvent) {
+      skippedCount++;
+      continue;
+    }
+
+    try {
+      const {
+        title,
+        description,
+        location,
+        flyerUrl,
+        startAt,
+        endsAt,
+        capacity,
+        externalId,
+        categories,
+      } = eventData;
+
+      const newEvent = await eventModel.create({
+        title,
+        description,
+        location,
+        flyerUrl,
+        startAt,
+        endsAt,
+        capacity,
+        externalId,
+        categories,
+      });
+
+      if (newEvent) {
+        createdCount++;
+        console.log(`Successfully created new event: ${newEvent.title}`);
+      }
+    } catch (error) {
+      console.error(
+        `Error creating event ${eventData.title} with externalId ${eventData.externalId}:`,
+        error.message
+      );
+    }
+  }
+
+  try {
+    const today = new Date();
+    const todayString = today.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+
+    await transporter.sendMail({
+      from: `"Student Engagement Web Portal " <${process.env.EMAIL_USER}>`,
+      to: adminEmail,
+      subject: "RSS Daily Ingestion",
+      html: `
+          <h3>Hello Admin,</h3>
+          <p>RSS Ingestion for ${todayString} Complete. Created: ${createdCount}, Skipped: ${skippedCount}</p>
+        `,
+    });
+  } catch (error) {
+    console.error("Email send error:", error);
+  }
+
+  return res.status(200).json({
+    message: "RSS Sync Complete.",
+    created: createdCount,
+    skipped: skippedCount,
+    adminEmail
+  });
+}
+
+
+export async function ingestRssAuto() {
   const eventsFromRss = await transformRssToEventsArray();
   let createdCount = 0;
   let skippedCount = 0;
@@ -154,11 +246,11 @@ export async function ingestRssAlone(req, res) {
     console.error("Email send error:", error);
   }
 
-  return res.status(200).json({
+  return {
     message: "RSS Sync Complete.",
     created: createdCount,
     skipped: skippedCount,
-  });
+  };
 }
 
 // ingestRssAlone()
