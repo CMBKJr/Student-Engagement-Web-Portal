@@ -94,7 +94,7 @@ const MainLogin = () => {
 
       <img src={logo} alt="KSU Logo" className="auth-logo" />
 
-      <h2 style={{ color: "white" }}>Student Login</h2>
+      <h2 style={{ color: "white" }}>Login</h2>
 
       <form onSubmit={handleSubmit}>
         <input
