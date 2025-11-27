@@ -3,7 +3,6 @@ import "/src/admin.css";
 
 export default function Notifications() {
   return (
-    // <div className="admin-page">
     <div className="admin-content-page">
       <div className="grid">
         <div className="toolbar">

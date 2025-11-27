@@ -22,12 +22,12 @@ const eventSchema = new Schema(
     },
     startAt: {
       type: Date,
-      required: true,
+      // required: true,
       index: true,
     },
     endsAt: {
       type: Date,
-      required: true,
+      // required: true,
     },
     capacity: {
       type: Number,
@@ -37,6 +37,10 @@ const eventSchema = new Schema(
       index: true,
       unique: true,
       sparse: true,
+    },
+    associatedMilestone: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Milestone",
     },
     categories: {
       type: [String],

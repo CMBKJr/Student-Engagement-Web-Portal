@@ -2,15 +2,18 @@ import axios from "axios";
 
 const baseUrl = "http://localhost:8080/";
 
-const getMilestones = () => {
-  return axios.get(`${baseUrl}api/milestone`);
-};
+const getMilestones = () => axios.get(`${baseUrl}api/milestone`);
 
-const getCompletedMilestones = (userId) => {
-  return axios.post(`${baseUrl}api/milestone/get-completed`, {userId});
-};
+const createMilestone = (data) => axios.post(`${baseUrl}api/milestone`, data);
+
+const updateMilestone = (id, data) =>
+  axios.patch(`${baseUrl}api/milestone/${id}`, data);
+
+const deleteMilestone = (id) => axios.delete(`${baseUrl}api/milestone/${id}`);
 
 export default {
   getMilestones,
-  getCompletedMilestones
+  createMilestone,
+  updateMilestone,
+  deleteMilestone,
 };

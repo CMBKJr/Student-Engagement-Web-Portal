@@ -5,6 +5,7 @@ import userServices from "../api/userServices";
 export default function Users() {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
+  const userID = localStorage.getItem("LoggedInID");
 
   const fetchData = async () => {
     try {
@@ -18,19 +19,31 @@ export default function Users() {
     }
   };
 
+  const stripAdmin = async (id) => {
+    try {
+      const res = await userServices.updateUser(id, { role: "student" });
+      if (res.data) console.log(res.data);
+      fetchData();
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const makeAdmin = async (id) => {
+    try {
+      const res = await userServices.updateUser(id, { role: "admin" });
+      if (res.data) console.log(res.data);
+      fetchData();
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   const handleSearch = (event) => {
     setSearch(event.target.value);
   };
 
-  const usersToView =
-    search.length === 0
-      ? users
-      : users.filter(
-          (user) =>
-            user.firstname.toLowerCase().includes(search.toLowerCase()) ||
-            user.lastname.toLowerCase().includes(search.toLowerCase())
-        );
-  let accountsToView = users.filter((a) =>
+  let usersToView = users.filter((a) =>
     search.length === 0
       ? true
       : a.firstname.toLowerCase().includes(search.toLowerCase()) ||
@@ -65,17 +78,33 @@ export default function Users() {
                 <th>Email</th>
                 <th>Role</th>
                 <th>Completed Milestones</th>
-                {/* <th>Last Active</th> */}
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {accountsToView.map((user) => (
+              {usersToView.map((user) => (
                 <tr key={user._id}>
                   <td>{`${user.firstname} ${user.lastname}`}</td>
                   <td>{user.email}</td>
                   <td>{user.role}</td>
-                  <td>{user.completedMilestones.length}</td>
-                  {/* <td>2025-10-20</td> */}
+                  <td>
+                    {user.role === "admin"
+                      ? ""
+                      : user.completedMilestones.length}
+                  </td>
+                  <td>
+                    {user._id === userID ? (
+                      ""
+                    ) : user.role === "student" ? (
+                      <button onClick={() => makeAdmin(user._id)}>
+                        Make Admin
+                      </button>
+                    ) : (
+                      <button onClick={() => stripAdmin(user._id)}>
+                        Strip Privilege
+                      </button>
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>

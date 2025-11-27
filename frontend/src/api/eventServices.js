@@ -2,8 +2,8 @@ import axios from "axios";
 
 const baseUrl = "http://localhost:8080/";
 
-const create = (user) => {
-  return axios.post(`${baseUrl}api/events`, user);
+const create = (event) => {
+  return axios.post(`${baseUrl}api/events`, event);
 };
 const getOne = (id) => {
   return axios.get(`${baseUrl}api/events/${id}`);
@@ -11,16 +11,15 @@ const getOne = (id) => {
 const getAll = () => {
   return axios.get(`${baseUrl}api/events`);
 };
-const updateEvent = (id, user) => {
-  return axios.patch(`${baseUrl}api/events`, user);
+const updateEvent = (id, event) => {
+  return axios.patch(`${baseUrl}api/events/${id}`, event);
 };
 const deleteEvent = (id) => {
   return axios.delete(`${baseUrl}api/events/${id}`);
 };
 const ingest = (adminEmail) => {
-  return axios.post(`${baseUrl}api/events/ingest`, adminEmail)
-}
-
+  return axios.post(`${baseUrl}api/events/ingest`, adminEmail);
+};
 
 export default {
   create,
@@ -28,5 +27,5 @@ export default {
   getAll,
   updateEvent,
   deleteEvent,
-  ingest
+  ingest,
 };

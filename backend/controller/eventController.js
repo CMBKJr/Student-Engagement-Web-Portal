@@ -57,8 +57,6 @@ export const getEvent = asyncHandler(async (req, res) => {
 // create event
 // post method
 export const createEvent = asyncHandler(async (req, res) => {
-  const user = extractAndVerifyRole(req, res);
-
   const {
     title,
     description,
@@ -67,8 +65,11 @@ export const createEvent = asyncHandler(async (req, res) => {
     startAt,
     endsAt,
     capacity,
+    categories,
+    associatedMilestone,
     externalId,
   } = req.body;
+
   const event = await eventModel.create({
     title,
     description,
@@ -77,6 +78,8 @@ export const createEvent = asyncHandler(async (req, res) => {
     startAt,
     endsAt,
     capacity,
+    categories,
+    associatedMilestone,
     externalId,
   });
 
@@ -90,12 +93,6 @@ export const createEvent = asyncHandler(async (req, res) => {
 // update event
 // patch method
 export const updateEvent = asyncHandler(async (req, res) => {
-  const user = extractAndVerifyRole(req, res);
-
-  if (user.role !== "admin") {
-    return res.status(403).json({ message: "Not authorized" });
-  }
-
   const id = req.params.id;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -113,12 +110,6 @@ export const updateEvent = asyncHandler(async (req, res) => {
 // delete event
 // delete method
 export const deleteEvent = asyncHandler(async (req, res) => {
-  const user = extractAndVerifyRole(req, res);
-
-  if (user.role !== "admin") {
-    return res.status(403).json({ message: "Not authorized" });
-  }
-
   const id = req.params.id;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -132,97 +123,3 @@ export const deleteEvent = asyncHandler(async (req, res) => {
 
   res.status(200).json({ event, message: `${event.title} deleted` });
 });
-
-// export const ingestRss = asyncHandler(async (req, res) => {
-//   const eventsFromRss = await transformRssToEventsArray();
-//   let createdCount = 0;
-//   let skippedCount = 0;
-
-//   for (const eventData of eventsFromRss) {
-//     if (!eventData.externalId) {
-//       console.warn(
-//         "Skipping event due to missing externalId in RSS item:",
-//         eventData.title
-//       );
-//       skippedCount++;
-//       continue;
-//     }
-
-//     const existingEvent = await eventModel.findOne({
-//       externalId: eventData.externalId,
-//     });
-
-//     if (existingEvent) {
-//       console.log(
-//         `Event with externalId ${eventData.externalId} already exists. Skipping.`
-//       );
-//       skippedCount++;
-//       continue;
-//     }
-
-//     try {
-//       const {
-//         title,
-//         description,
-//         location,
-//         flyerUrl,
-//         startAt,
-//         endsAt,
-//         capacity,
-//         externalId,
-//         categories,
-//       } = eventData;
-
-//       const newEvent = await eventModel.create({
-//         title,
-//         description,
-//         location,
-//         flyerUrl,
-//         startAt,
-//         endsAt,
-//         capacity,
-//         externalId,
-//         categories,
-//       });
-
-//       if (newEvent) {
-//         createdCount++;
-//         console.log(`Successfully created new event: ${newEvent.title}`);
-//       }
-//     } catch (error) {
-//       console.error(
-//         `Error creating event ${eventData.title} with externalId ${eventData.externalId}:`,
-//         error.message
-//       );
-//     }
-//   }
-
-//   try {
-//     const today = new Date();
-    
-//     const todayString = today.toLocaleDateString('en-US', {
-//         year: 'numeric',
-//         month: 'long',
-//         day: 'numeric',
-//     });
-
-//     await transporter.sendMail({
-//       from: `"Your App Name" <${process.env.EMAIL_USER}>`,
-//       to: "ezeobiekene7@gmail.com",
-//       subject: "RSS Daily Ingestion",
-//       html: `
-//           <h3>Hello Admin,</h3>
-//           <p>RSS Ingestion for ${todayString} Complete. Created: ${createdCount}, Skipped: ${skippedCount}</p>
-//         `,
-//     });
-//   } catch (error) {
-//     console.error("Email send error:", error);
-//   }
-
-  
-//   res.status(200).json({
-//     message: "RSS Sync Complete.",
-//     created: createdCount,
-//     skipped: skippedCount,
-//   });
-// });

@@ -240,7 +240,7 @@ export const markEventAsAttended = async (req, res) => {
 
   // AUTOMATIC MILESTONE MATCHING
   const matchedMilestone = await findMatchingMilestone(
-    event.title,
+    event,
     milestoneModel
   );
 

@@ -1,13 +1,29 @@
-import React from "react";
+import React, { useRef, useState, useEffect } from "react";
 import "/src/admin.css";
+import eventServices from "../api/eventServices";
 
 export default function Dashboard() {
-  const upcoming = [
-    { when: "Tue 10/28 3:30p", title: "Tech Talk: Cloud 101", cat: "Career" },
-    { when: "Thu 10/30 1:00p", title: "Advising Q&A", cat: "Academic" },
-  ];
+
+  const [events, setEvents] = useState([]);
+
+  const fetchData = async () => {
+    try {
+      const res = await eventServices.getAll();
+
+      if (res.data) {
+        setEvents(res.data);
+        console.log(res.data);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
-    // <div className="admin-page">
     <div className="admin-content-page">
       <div className="grid">
         <div className="toolbar">
@@ -49,16 +65,21 @@ export default function Dashboard() {
                 </tr>
               </thead>
               <tbody>
-                {upcoming.map((e, i) => (
-                  <tr key={i}>
-                    <td>{e.when}</td>
-                    <td>{e.title}</td>
-                    <td>{e.cat}</td>
-                    <td>
-                      <a href="#/admin/events">Open</a>
-                    </td>
-                  </tr>
-                ))}
+                {events.map((e, i) => {
+                  const dateObj = new Date(e.startAt);
+                  const dateString = dateObj.toLocaleDateString("en-US");
+
+                  return (
+                    <tr key={i}>
+                      <td>{dateString}</td>
+                      <td>{e.title}</td>
+                      <td>{e.categories[0]}</td>
+                      <td>
+                        <a href="#/admin/events">Open</a>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
             <div className="hint" style={{ marginTop: ".5rem" }}>

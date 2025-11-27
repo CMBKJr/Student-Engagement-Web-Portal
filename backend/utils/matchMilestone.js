@@ -4,20 +4,25 @@ import levenshtein from "js-levenshtein";
 const normalize = (str) =>
   str.toLowerCase().replace(/[^a-z0-9 ]/g, "").trim();
 
-export const findMatchingMilestone = async (eventTitle, MilestoneModel) => {
+export const findMatchingMilestone = async (event, MilestoneModel) => {
+  const { title: eventTitle, associatedMilestone } = event;
   const cleanTitle = normalize(eventTitle);
+
+
+  if (associatedMilestone) {
+    const milestone = await MilestoneModel.findById(associatedMilestone).lean();
+    if (milestone) return milestone;
+  }
 
   const milestones = await MilestoneModel.find().lean();
 
   for (const milestone of milestones) {
-    // 1. Keyword Matching
     for (const keyword of milestone.autoKeywords) {
       if (cleanTitle.includes(normalize(keyword))) {
         return milestone;
       }
     }
 
-    // 2. Partial Title Similarity Match
     const similarity =
       1 -
       levenshtein(cleanTitle, normalize(milestone.title)) /
@@ -28,5 +33,5 @@ export const findMatchingMilestone = async (eventTitle, MilestoneModel) => {
     }
   }
 
-  return null; // No match
+  return null;
 };
