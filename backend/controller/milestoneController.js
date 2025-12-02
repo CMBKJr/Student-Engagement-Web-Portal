@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { milestoneModel } from "../model/milestoneModel.js";
+import { userModel } from "../model/userModel.js";
 import asyncHandler from "express-async-handler";
 
 export const createMilestone = asyncHandler(async (req, res) => {
@@ -45,3 +46,35 @@ export const deleteMilestone = asyncHandler(async (req, res) => {
 
   res.status(200).json({ deleted, message: "Milestone deleted" });
 });
+
+export const getCompletedMilestones = asyncHandler(async (req, res) => {
+  const { userId } = req.body;
+
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    res.status(400).json({ err: "Invalid Id" });
+  }
+  const user = await userModel.findById(userId);
+
+  if (!user) {
+    return res.status(400).json({ message: "User not found" });
+  }
+
+  const completedMilestonesId = user.completedMilestones;
+  const completedMilestones = [];
+
+  for (const m_id of completedMilestonesId) {
+    const title = await getMilestoneTitle(m_id);
+    completedMilestones.push(title);
+  }
+
+  res.status(200).json({
+    completedMilestones,
+    message: "Task completed successfully",
+  });
+});
+
+const getMilestoneTitle = async (milestoneId) => {
+  const milestone = await milestoneModel.findById(milestoneId).lean();
+
+  return milestone?.title || null;
+};

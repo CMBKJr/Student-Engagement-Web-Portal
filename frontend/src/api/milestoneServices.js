@@ -11,9 +11,14 @@ const updateMilestone = (id, data) =>
 
 const deleteMilestone = (id) => axios.delete(`${baseUrl}api/milestone/${id}`);
 
+const getCompletedMilestones = (userId) => {
+  return axios.post(`${baseUrl}api/milestone/get-completed`, {userId});
+};
+
 export default {
   getMilestones,
   createMilestone,
   updateMilestone,
   deleteMilestone,
+  getCompletedMilestones
 };

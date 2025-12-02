@@ -235,7 +235,7 @@ export async function ingestRssAuto() {
 
     await transporter.sendMail({
       from: `"Student Engagement Web Portal " <${process.env.EMAIL_USER}>`,
-      to: "ezeobiekene7@gmail.com",
+      to: "amcclur6@kennesaw.edu",
       subject: "RSS Daily Ingestion",
       html: `
           <h3>Hello Admin,</h3>
